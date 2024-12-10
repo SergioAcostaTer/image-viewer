@@ -1,5 +1,8 @@
 package software.ulpgc.imageviewer.swing;
 
+import software.ulpgc.imageviewer.commands.Command;
+import software.ulpgc.imageviewer.commands.NextImageCommand;
+import software.ulpgc.imageviewer.commands.PreviousImageCommand;
 import software.ulpgc.imageviewer.ImageDisplay;
 
 import javax.swing.*;
@@ -14,7 +17,10 @@ public class MainFrame extends JFrame {
         this.setSize(800, 600);
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        this.add(createImageDisplay());
+        this.setLayout(new BorderLayout());
+
+        this.add(createImageDisplay(), BorderLayout.CENTER);
+        this.add(createControlPanel(), BorderLayout.SOUTH);
     }
 
     public ImageDisplay getImageDisplay() {
@@ -30,5 +36,22 @@ public class MainFrame extends JFrame {
         SwingImageDisplay display = new SwingImageDisplay(imagePaths);
         this.imageDisplay = display;
         return display;
+    }
+
+    private JPanel createControlPanel() {
+        JPanel panel = new JPanel();
+        Command nextCommand = new NextImageCommand(imageDisplay);
+        Command previousCommand = new PreviousImageCommand(imageDisplay);
+
+        JButton previousButton = new JButton("Previous");
+        previousButton.addActionListener(e -> previousCommand.execute());
+
+        JButton nextButton = new JButton("Next");
+        nextButton.addActionListener(e -> nextCommand.execute());
+
+        panel.add(previousButton);
+        panel.add(nextButton);
+
+        return panel;
     }
 }

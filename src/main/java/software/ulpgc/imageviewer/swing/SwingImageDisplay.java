@@ -119,9 +119,16 @@ public class SwingImageDisplay extends JPanel implements ImageDisplay {
 
     @Override
     public void paint(String id, int offset) {
-        paints.add(new Paint(id, offset));
+        if ("next".equals(id)) {
+            currentIndex = (currentIndex + 1) % paints.size();
+        } else if ("previous".equals(id)) {
+            currentIndex = (currentIndex - 1 + paints.size()) % paints.size();
+        } else {
+            paints.add(new Paint(id, offset));
+        }
         repaint();
     }
+
 
     @Override
     public void clear() {
